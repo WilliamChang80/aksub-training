@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 import Card from "../Components/Card/Card";
 import productList from "../Datas/ProductList";
 import SearchBar from "../Components/Search/SearchBar";
 import Cart from "../Components/Cart/Cart";
+import { routeList } from "../Routes/Route";
+import Spinner from "../Components/Spinner/Spinner";
 
 class ProductPage extends Component {
   state = {
@@ -12,7 +15,13 @@ class ProductPage extends Component {
   };
 
   componentDidMount() {
-    this.setState({ products: productList });
+    setTimeout(() => {
+      axios
+        .get(routeList.getAllProducts)
+        .then((res) => res.data.data)
+        .then((data) => this.setState({ products: data }))
+        .catch((e) => console.log(e));
+    }, 2000);
   }
 
   searchProduct = (value) => {
@@ -27,21 +36,25 @@ class ProductPage extends Component {
     this.setState({ cart: [...this.state.cart, data] });
   };
 
+  renderCards = () => {
+    return this.state.products.map((product) => (
+      <Card
+        name={product.name}
+        price={product.price}
+        stock={product.stock}
+        key={product.id}
+        addToCart={this.addToCart}
+      />
+    ));
+  };
+
   render() {
     return (
       <div>
         <div className="card-container">
           <SearchBar searchProduct={this.searchProduct} />
           <Cart datas={this.state.cart} />
-          {this.state.products.map((product) => (
-            <Card
-              name={product.name}
-              price={product.price}
-              stock={product.stock}
-              key={product.name}
-              addToCart={this.addToCart}
-            />
-          ))}
+          {this.state.products.length === 0 ? <Spinner /> : this.renderCards()}
         </div>
       </div>
     );

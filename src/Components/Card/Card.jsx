@@ -7,7 +7,6 @@ class Card extends Component {
   state = {
     stock: 0
   };
-
   incrementStock = () => {
     this.state.stock < this.props.stock &&
       this.setState({ stock: this.state.stock + 1 });
@@ -28,7 +27,6 @@ class Card extends Component {
     };
     this.props.addToCart(data);
   };
-
   render() {
     const { name, price } = this.props;
     return (
