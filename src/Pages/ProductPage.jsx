@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import axios from "axios";
 
-import Card from "../Components/Card/Card";
-import productList from "../Datas/ProductList";
-import SearchBar from "../Components/Search/SearchBar";
-import Cart from "../Components/Cart/Cart";
-import { routeList } from "../Routes/Route";
-import Spinner from "../Components/Spinner/Spinner";
+import axios from "Api/Mock/product-mock";
+import Card from "Components/Card/Card";
+import productList from "Datas/ProductList";
+import SearchBar from "Components/Search/SearchBar";
+import Cart from "Components/Cart/Cart";
+import Spinner from "Components/Spinner/Spinner";
 
 class ProductPage extends Component {
   state = {
@@ -15,13 +14,11 @@ class ProductPage extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      axios
-        .get(routeList.getAllProducts)
-        .then((res) => res.data.data)
-        .then((data) => this.setState({ products: data }))
-        .catch((e) => console.log(e));
-    }, 2000);
+    axios
+      .get("/products")
+      .then((res) => res.data.data)
+      .then((data) => this.setState({ products: data }))
+      .catch((e) => console.log(e));
   }
 
   searchProduct = (value) => {
@@ -48,9 +45,20 @@ class ProductPage extends Component {
     ));
   };
 
+  addProduct = () => {
+    axios
+      .post("/product", { name: "Jaket", id: 2 })
+      .then((res) => res.data)
+      .then((data) =>
+        this.setState({ products: [...this.state.products, data] })
+      )
+      .catch((e) => console.log(e));
+  };
+
   render() {
     return (
       <div>
+        <button onClick={() => this.addProduct()}>Add Product</button>
         <div className="card-container">
           <SearchBar searchProduct={this.searchProduct} />
           <Cart datas={this.state.cart} />

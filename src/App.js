@@ -1,13 +1,16 @@
 import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import ProductPage from "./Pages/ProductPage";
+import MainPage from "Pages/MainPage";
 
-import "./Style/index.scss";
+import "Style/index.scss";
 
 function App() {
   return (
     <div className="App">
-      <ProductPage />
+      <BrowserRouter>
+        <Route path="*" component={MainPage} />
+      </BrowserRouter>
     </div>
   );
 }

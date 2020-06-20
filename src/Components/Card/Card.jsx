@@ -1,7 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, lazy, Suspense } from "react";
 
-import Stock from "../Stock/Stock";
-import Buyout from "../Buyout/Buyout";
+import Stock from "Components/Stock/Stock";
+import Buyout from "Components/Buyout/Buyout";
+import Spinner from "Components/Spinner/Spinner";
+
+const Image = lazy(() => import("../Image/Image"));
 
 class Card extends Component {
   state = {
@@ -32,11 +35,12 @@ class Card extends Component {
     return (
       <div className="card">
         <div className="card-title">{name}</div>
-        <img
-          className="card-image"
-          src={"http://localhost:3000/Assets/Images/product.jpg"}
-          alt="product"
-        />
+        <Suspense fallback={<Spinner />}>
+          <Image
+            source={`${process.env.PUBLIC_URL}/Assets/Images/product.jpg`}
+            name="card-image"
+          />
+        </Suspense>
         <div className="card-price">{`Rp ${price}`}</div>
         <div className="card-button" onClick={() => this.submitProduct()}>
           Add To Cart
