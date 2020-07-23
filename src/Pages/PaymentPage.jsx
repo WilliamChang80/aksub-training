@@ -1,9 +1,21 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class PaymentPage extends Component {
+  renderPaymentList = () => {
+    return this.props.payments.map((payment) => (
+      <div>
+        {payment.name} - {payment.total}
+      </div>
+    ));
+  };
   render() {
-    return <div>Test</div>;
+    return <div>{this.renderPaymentList()}</div>;
   }
 }
 
-export default PaymentPage;
+const mapStateToProps = ({ payments: { payments } }) => ({
+  payments
+});
+
+export default connect(mapStateToProps)(PaymentPage);
